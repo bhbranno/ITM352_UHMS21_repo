@@ -1,0 +1,130 @@
+<!--Author: Ben Brannon
+    This code displays a webpage for a list of products-->
+    
+<script>
+    //Check for Errors, make sure they are putting valid input
+    function isNonNegInt(q, returnErrors = false) {
+        if (q == '') q = 0;
+        var errors = [];
+        if (Number(q) != q) errors.push('Not a number!');
+        if (q < 0) errors.push('Negative value!');
+        if (parseInt(q) != q) errors.push('Not an integer!');
+
+        return returnErrors ? errors : (errors.length == 0);
+    }
+
+    function checkQuantityTextbox(qtyTextboxObj) {
+        errs = isNonNegInt(qtyTextboxObj.value, true);
+        document.getElementById(qtyTextboxObj.name + "_message").innerHTML = errs.join(' , ');
+    }
+
+    var params = (new URL(document.location)).searchParams;
+    //validate the data when the window loads
+    window.onload = function () {
+        //check if they press the submit button
+        if (params.has('purchase_submit')) {
+
+            //start off with no errors --> use this as a holder for future invalid errors
+            has_errors = false;
+            //start off with no quantity --> use this to detect if there is a quantity
+            has_quantities = false;
+            //loop all the text boxes to check for invalid errors
+            for (i = 0; i < products.length; i++) {
+                //telling where to look for the invalid error in the code
+                product_selection_form[`quantity${i}`].value = params.get(`quantity${i}`);
+                checkQuantityTextbox(product_selection_form[`quantity${i}`]);
+
+                //quantity invalid?
+                if (!isNonNegInt(params.get(`quantity${i}`))) {
+                    has_errors = true;
+                }
+                //has a quantity been inputted?
+                if (params.get(`quantity${i}`) > 0) {
+                    has_quantities = true;
+                }
+
+
+            }
+            // I wanted nothing to happen from the browser if there is an error
+            // because I have in-line validation in my html, however I did want the invoice to load
+            // if there are no errors and the quantities are correct
+            // it will alert if there are no quantites selected to avoid a loop
+            if (has_errors) {
+                window.location.href = "";
+            }
+            else if (!has_quantities) {
+                alert("no quantities selected");
+            }
+            else {
+                window.location.href = "invoice.html" + document.location.search;
+            }
+
+        }
+    }
+
+
+</script>
+<!--taken from Lab 8-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="./products_data.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="products-style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;900&display=swap" rel="stylesheet">
+    <title>Ben's Army Surplus Store</title>
+</head>
+<body>
+    <header>
+        <!-- Image Header -->
+<div class="container">
+    <img class="background_img" src="./images/Soldier.jpg" alt="soldier" style="width:100%;min-height:350px;max-height:600px;">
+      <div class="right"><h1 class="scrim">Ben's Army Surplus Store</h1>
+    <br>
+<img name="army" src="./images/army_logo.jpg"></div>
+  </div>
+    </header>
+    <form name="product_selection_form" action="" method="GET">
+        <main>
+
+            <script>
+                // create a section for each product in the products array that will hold the quantity
+                for (i = 0; i < products.length; i++) {
+                    document.write(`
+          <section> 
+            <div class="left-column">
+        <img src=${products[i].image}>
+        </div>
+        <div class="right-column">
+        <h2>${products[i].product}</h2> 
+          <br>
+          <p>${products[i].description}</p>
+          <p> $${(products[i].price).toFixed(2)}</p>
+          <div class="border-div">
+            </div>
+            <label id="quantity${i}_label"}">Quantity:</label>
+           <input type="number" min="1" step ="1" placeholder="Enter amount" name="quantity${i}" onkeyup="checkQuantityTextbox(this);">
+           <br>
+           <span id="quantity${i}_message"></span>
+           </div>
+          
+          
+      </section>
+          `);
+           }
+            </script>
+    <!--Purchase Button-->
+    <input type="submit" value="Purchase!" name="purchase_submit" class="purchase">
+    </form>
+    <footer>
+        Follow us on social media! <a href=""><img name ="instagram" src="./images/instagram-brands.svg" height="40"/></a>
+        <a href=""><img name="facebook" src="./images/facebook-f-brands.svg" height ="40"></a>
+    <br>
+    <p>&copy Ben Brannon</p>
+    <p>Spring 2021</p>
+    </footer>
+</body>
+</html>
