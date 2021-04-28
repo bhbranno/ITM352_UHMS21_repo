@@ -1,0 +1,53 @@
+/* Author: Ben Brannon
+    Stylsheet for invoice.html */
+
+
+/* General styling */
+html, body {
+    font-family: 'Roboto', sans-serif;
+    background-color:#4b53202a;
+}
+
+
+/* style the shipping policy text and the invoice table */
+#ship_info {
+    width: 50%;
+}
+table {
+    width: 100%;
+}
+
+/* style the US army logo and the homepage link button */
+.image-div img{
+    width: 200px;
+    margin-left: 40%;
+    border-radius: 20px;
+}
+div a{
+    display:block;
+    text-decoration: none;
+    background-color: #FFCB05;
+    color:Black;
+    font-weight:700;
+    font-size: 25px;
+    border-radius:10px;
+    width: 200px;
+    margin-left:50px;
+    text-align:center;
+    padding: 5px;
+}
+div a:hover {
+    background-color:#ffcd059c;
+}
+#container-div{
+    display:inline;
+    margin: auto;
+}
+#right-column {
+    margin-left:50%;
+    margin-top:-5%;
+}
+#left-column {
+    margin-top: -20%;
+    margin-right: 50px;
+}

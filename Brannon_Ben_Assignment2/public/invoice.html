@@ -1,0 +1,126 @@
+<!--Author: Ben Brannon
+    This page generates an invoice based on selected quantites from
+    products_display.html-->
+
+<script src="./products_data.js" type="text/javascript"></script>
+<script>
+    // checking for errors
+    //taken from lab 12
+    function isNonNegInt(q, returnErrors=false) {
+    if(q=='') q=0;
+    var errors = []; // assume no errors at first
+    if(Number(q) != q) errors.push('Not a number!'); // Check if string is a number value
+    if(q < 0) errors.push('Negative value!'); // Check if it is non-negative
+    if(parseInt(q) != q) errors.push('Not an integer!'); // Check that it is an integer
+
+    return returnErrors ? errors : (errors.length == 0);
+    }
+
+    // getting the quantity of the products from products_display.html
+    var params = (new URL(document.location)).searchParams;
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="./css/invoice-style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;900&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAS Invoice</title>
+</head>
+
+<body>
+    <table border="2">
+        <tbody>
+          <tr>
+            <th style="text-align: center;" width="43%">Item</th>
+            <th style="text-align: center;" width="11%">Quantity</th>
+            <th style="text-align: center;" width="13%">Price</th>
+            <th style="text-align: center;" width="54%">Extended Price</th>
+          </tr>
+    <script>
+        var subtotal = 0;
+        // check the quantities of each product and generate product rows
+        for (i = 0; i < products.length; i++) {
+          quantity = params.get(`quantity${i}`);
+          //if there is no quantity selected, go back through and check the other textboxes
+          if (quantity == 0) {
+            continue;
+          }
+          extended_price = quantity * products[i].price;
+          subtotal += extended_price;
+          document.write(`
+  <tr>
+    <td >${products[i].product}</td>
+    <td align="center" width="11%">${quantity}</td>
+    <td width="13%">$${(products[i].price).toFixed(2)}</td>
+    <td width="54%">$${extended_price.toFixed(2)}</td>
+  </tr>
+  `);
+        }
+
+    // Determine sales tax
+    var tax = 0.0575;
+    var sales_tax = subtotal * tax;
+
+    // Shipping
+    var shipping;
+
+    if (subtotal <= 49.99){
+      shipping = 2;
+    }
+    else if (subtotal >=50 && subtotal <= 99.99){
+      shipping = 5;
+    }
+    else if(subtotal > 100){
+      shipping = subtotal * .05; // 5% of subtotal
+    }
+
+    // Grand total
+    var grand_total = sales_tax + subtotal + shipping;
+          </script>
+
+    <h2>
+
+    Thank you for your purchase <script>document.write(`${params.get('username')}`)</script>!</h2>      
+          <tr>
+            <td colspan="4" width="100%">&nbsp;</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;" colspan="3" width="67%">Sub-total</td>
+            <td width="54%">$<script>document.write(subtotal.toFixed(2));</script></td>
+          </tr>
+          <tr>
+            <td style="text-align: center;" colspan="3" width="67%"><span style="font-family: arial;">Tax @ 5.75%</span></td>
+            <td width="54%">$<script>document.write(sales_tax.toFixed(2));</script></td>
+          </tr>
+          <tr>
+            <td style="text-align: center;" colspan="3" width="67%">Shipping</td>
+            <td width="54%">$<script>document.write(shipping.toFixed(2))</script></td>
+          </tr>
+          <tr>
+            <td style="text-align: center;" colspan="3" width="67%"><strong>Total</strong></td>
+            <td width="54%"><strong>$<script>document.write(grand_total.toFixed(2));</script></strong></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="ship_info">
+            <h2>Shipping Policy</h2>
+            <p>A subtotal of $49.99 or less will have a shipping fee of $2. A $5 shipping fee will be assessed
+               on orders between $50 and $99.99. Orders $100 and above will be charged 5% of the total as
+               the shipping fee.</p>
+      </div>
+      <div id="container-div">
+      <div class="image-div" id="right-column">
+          <img src="./images/army_logo.jpg">
+      </div>
+      <div class="home-link-div" id="left-column">
+          <a href="./index.html">Back to Home</a>
+        </div>
+      </div>
+</body>
+
+</html>
