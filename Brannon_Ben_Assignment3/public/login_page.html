@@ -1,0 +1,60 @@
+<!--Author: Ben Brannon
+This page allows for registered users to log in and continue on to the invoice with their order-->
+
+<script>
+    function checkQuantityTextbox(qtyTextboxObj) {
+        var errs = isNonNegInt(qtyTextboxObj.value, true);
+        qty_textbox_message.innerHTML = errs.join(',');
+    }
+
+    function isNonNegInt(q, returnErrors = false) {
+        if (q == '') q = 0;
+        var errors = []; // assume no errors at first
+        if (Number(q) != q) errors.push('Not a number!'); // Check if string is a number value
+        if (q < 0) errors.push('Negative value!'); // Check if it is non-negative
+        if (parseInt(q) != q) errors.push('Not an integer!'); // Check that it is an integer
+
+        return returnErrors ? errors : (errors.length == 0);
+    }
+
+</script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/login.css">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <title>Sign in</title>
+</head>
+
+
+<body>
+    <!-- html for login taken from speckyboy.com/login-pages-html5-css/-->
+    <div class="main">
+        <p class="sign" align="center">Sign in</p>
+        <script>
+            document.write(`<form name="login_form" id="login_form" action ="process_login${location.search}" method="POST" class="form1">`)
+        </script>
+
+        <input name="username" id="username" class="username" type="text" align="center" placeholder="Username">
+        <input name="password" id="password" class="pass" type="password" align="center" placeholder="Password">
+        <input name="create_account_btn" type="submit" class="submit" align="center" value="Log in"
+            id="login_form_submit">
+        <p class="forgot" align="center"><a href="#">Forgot Password?</p>
+        <script>
+            document.write(`<p class="new_user" align="center"><a href="./registration_page.html${location.search}">Click Here to Create an Account</p>`); //allows for users to go to the registration page while keeping the query string in the URL intact so it follows the user to the invoice page
+        </script>
+        </form>
+
+    </div>
+
+</body>
+
+</html>

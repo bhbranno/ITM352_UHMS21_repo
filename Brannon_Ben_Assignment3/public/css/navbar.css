@@ -1,0 +1,39 @@
+/* Author: Ben Brannon
+This code was inspired by Kimberly Matutina and modified to fit my design
+This code styles my navbar on each of my product pages*/
+
+#navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: rgb(255, 255, 255);
+    top: 0;
+    width: 75%;
+    font-family:'Black Ops One', Arial, sans-serif;
+}
+#navbar li {
+    float: left;
+}
+#navbar li a {
+    display: block;
+    color: black;
+    font-size: 18pt;
+    text-align: center;
+    padding: 20px 20px;
+    text-decoration: none;
+}
+#navbar li a:hover:not(.active) {
+    background-color: whitesmoke;
+}
+#navbar .active {
+    background-color: whitesmoke;
+    }
+#navbar {
+    margin-top:-50px;
+    border-top-style:solid black;
+    border-bottom:none;
+    border-left:none;
+    border-right:none;
+    
+}    

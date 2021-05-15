@@ -1,0 +1,262 @@
+<!--Author: Ben Brannon
+    This page generates an invoice based on selected quantites from
+    products_display.html
+    Some code was inspired by Kimberly Matutina's code and modified for my own use -->
+
+<script>
+  var params = (new URL(document.location)).searchParams;
+
+
+
+  // Get shopping cart data
+  function loadJSON(service, callback) {
+    var xobj = new XMLHttpRequest();
+    xobj.overrideMimeType("application/json");
+    xobj.open('POST', service, false);
+    xobj.onreadystatechange = function () {
+      if (xobj.readyState == 4 && xobj.status == "200") {
+        // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+        callback(xobj.responseText);
+      }
+    };
+    xobj.send(null);
+  }
+
+  // Load product data
+  var products_data;
+  loadJSON('get_products_data', function (response) {
+    // Parsing JSON string into object
+    allproducts = JSON.parse(response);
+  });
+
+  // function to get cookie taken from W3 schools
+  function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return false;
+  }
+</script>
+<script>
+  // checking for errors
+  //taken from lab 12
+  function isNonNegInt(q, returnErrors = false) {
+    if (q == '') q = 0;
+    var errors = []; // assume no errors at first
+    if (Number(q) != q) errors.push('Not a number!'); // Check if string is a number value
+    if (q < 0) errors.push('Negative value!'); // Check if it is non-negative
+    if (parseInt(q) != q) errors.push('Not an integer!'); // Check that it is an integer
+
+    return returnErrors ? errors : (errors.length == 0);
+  }
+
+
+
+  // Function to complete purchase
+  function completePurchase() {
+    completePurchasediv.innerHTML = `Thank you for  your purchase, ${user_info["name"]}`;
+    div = invoiceTableDiv;
+    var scripts = div.getElementsByTagName('script');
+    var i = scripts.length;
+    while (i--) {
+      scripts[i].parentNode.removeChild(scripts[i]);
+    }
+    (async () => { // Borrowed and modified code https://stackoverflow.com/questions/29775797/fetch-post-json-data
+      const rawResponse = await fetch('./completePurchase', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ "invoicehtml": div.innerHTML })
+      });
+      const content = await rawResponse.json();
+
+      alert(content["status"]);
+    })();
+  }
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="./css/invoice-style.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;900&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAS Invoice</title>
+</head>
+
+<body>
+  <script>
+    if (getCookie('user_info') != false) {
+      var user_info = JSON.parse(getCookie('user_info'));
+      console.log(user_info);
+      document.write(`<p style="color:green;font-weight:bold;">Welcome, ${user_info["name"]}</p>`); // If cookie exists for the user, display a welcome message 
+    } else {
+      document.write(`<p><a style="color:red;font-weight:bold;text-decoration:none;" href="login_page.html">Login here before purchasing</a></p>`); // If cookie doesnt exist for the user, display message that they need to log in first
+    };
+  </script>
+  <form action="/update_cart" method="POST">
+    <table border="2">
+      <tbody>
+        <tr>
+          <th style="text-align: center;" width="10%"></th>
+          <th style="text-align: center;" width="30%">Item</th>
+          <th style="text-align: center;" width="11%">Quantity</th>
+          <th style="text-align: center;" width="13%">Price</th>
+          <th style="text-align: center;" width="54%">Extended Price</th>
+        </tr>
+
+        <script>
+
+
+
+
+
+
+
+
+          var cart_data;
+          loadJSON('get_cart', function (response) {
+            // Parsing JSON string into object
+            cart_data = JSON.parse(response);
+          });
+          console.log(cart_data);
+          subtotal = 0; // Initially set subtotal to 0
+          for (prod_key in cart_data) {
+            products = allproducts[prod_key];
+            for (i in cart_data[prod_key]) {
+              if (cart_data[prod_key][i] > 0) { // If quantities > 0 then perform the expression
+                extended_price = cart_data[prod_key][i] * products[i].price;
+                subtotal += extended_price; // subtotal = subtotal + extended_price
+                // create table with quantites from the session data
+                document.write(` 
+        <tr style="border-bottom:2px"> 
+          <!-- Load in product image -->
+          <td width="23%"><img src="./${products[i].image}" style="width:120px;height:auto;"></td>
+          <!-- Load in product name -->
+          <td width="20%">${products[i].product}</td>
+          <!-- Load in desired product quantity -->
+          <td align="center" width="11%"><input type="text" name="quantities[${prod_key}][${i}]" value="${cart_data[prod_key][i]}" min="0"></td>
+          <!-- Load in product price -->
+          <td width="13%">\$${products[i].price}</td>
+          <!-- Load in product extended price -->
+          <td width="54%">\$${extended_price.toFixed(2)}</td>
+        </tr>
+    `);
+              }
+            }
+          }
+          // Compute sales tax 
+          var tax = 0.0575; // Sets value of tax_rate to 5.75%
+          var sales_tax = tax * subtotal;
+
+
+          // Compute shipping
+          if (subtotal <= 49.99) { // If subtotal is less than $50, calulate $2 shipping
+            shipping = 2;
+          }
+          else if (subtotal >= 50 && subtotal <= 99.99) { // Otherwise, if subtotal is less than or equal to $100, calulate $5 shipping
+            shipping = 5;
+          }
+          else if (subtotal > 100) {
+            shipping = subtotal * .05; // If order is greater than $100, shipping is 5% of subtotal 5% of subtotal
+          }
+
+          // Compute grand total
+          var grand_total = subtotal + sales_tax + shipping;
+        </script>
+        <tr>
+          <td colspan="4" width="100%">&nbsp;</td>
+        </tr>
+        <tr>
+          <td style="text-align: center;" colspan="3" width="67%">Sub-total</td>
+          <td width="54%">$
+            <script>document.write(subtotal.toFixed(2));</script> <!-- Display calculated subtotal-->
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: center;" colspan="3" width="67%"><span>Tax @
+              <script>document.write(100 * tax.toFixed(4));</script>%
+              <!-- Display tax_rate fixed from 0.0575 to 5.75 -->
+            </span></td>
+          <td width="54%">$
+            <script>document.write(sales_tax.toFixed(2));</script> <!-- Display calculated Tax-->
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: center;" colspan="3" width="67%"><span>Shipping</span></td>
+          <td width="54%">$
+            <script>document.write(shipping.toFixed(2));</script> <!-- Display calculated shipping rate-->
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: center;" colspan="3" width="67%"><strong>Total</strong></td>
+          <td width="54%"><strong>$
+              <script>document.write(grand_total.toFixed(2));</script> <!-- Display calculated final total-->
+            </strong></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <!-- Button to allow the user to update the quantities in their cart-->
+    <input type="submit" value="Update Cart" style="
+  background-color:#FFCB05;
+  margin-top:10px;
+  border-radius: 8px;
+  font-family: 'Black Ops One', Arial, sans-serif; text-align: center;">
+  </form>
+
+  <script>
+    if (getCookie("user_info") != false) // Has username cookie, so logged in
+    {
+      document.write(`
+    <div id="completePurchasediv" class="completePurchasediv">
+    <input type="button" onclick="completePurchase();" value="Complete Purchase" style="
+    font-family:'Black Ops One';
+    background-color:#FFCB05;
+    border-radius: 10px;
+    " >
+    </div>`);
+    } else { // No username cookie so not logged in, display this message
+      document.write(`
+    <div>
+    <input type="button" onclick="location.href='./login_page.html';" value="Please Log in to Complete Purchase" style="
+    background-color:#FFCB05;
+    font-family:'Black Ops One';
+    border-radius: 8px;
+    " >
+    </div>`);
+    }
+  </script>
+  <div id="ship_info">
+    <h2>Shipping Policy</h2>
+    <p>A subtotal of $49.99 or less will have a shipping fee of $2. A $5 shipping fee will be assessed
+      on orders between $50 and $99.99. Orders $100 and above will be charged 5% of the total as
+      the shipping fee.</p>
+  </div>
+  <div id="container-div">
+    <div class="image-div" id="right-column">
+      <img src="./images/army_logo.jpg">
+    </div>
+    <div class="home-link-div" id="left-column">
+      <a href="./index.html">Back to Home</a>
+    </div>
+  </div>
+</body>
+
+</html>

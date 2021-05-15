@@ -92,7 +92,7 @@ app.post('/process_register', function (request, response, next) {
         errors.push('Please use a valid email format (ex. johnsmith@gmail.com)')
     }
 
-    // Make password a minimum of six characters
+    // Make password a minimum of 8 characters
     if (request.body.password.length < 8) {
         errors.push('Your password is too short (Please use at least 8 characters).')
     }

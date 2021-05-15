@@ -1,0 +1,71 @@
+<!--Author: Ben Brannon
+This form is for new users to register and have their info saved in the DB-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="./css/registration.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+
+</head>
+<!--Validate that the passwords match, code obtained from javatpoint.com and modified to fit the assignment-->
+<script>
+    let params = (new URL(document.location)).searchParams;
+    window.onload = function () {
+        if (params.has('errors')) {
+            console.log("invalid");
+            alert('Fix the following errors: \n' + params.get('errors'));
+            Register["username"].value = params.get("username");
+            Register["password"].value = params.get("password");
+        }
+    }
+</script>
+
+
+<body>
+    <!-- Code for form taken from freshdesignweb.com/ code belongs to https://codepen.io/chrissteurer/pen/oqjul -->
+    <!-- Form allows users to input various text fields to create an account which is then added to the user_data.json file-->
+    <script>
+        document.write(`<form name="Register" id="register_form" id="register" action ="process_register${location.search}"  method="POST">`)
+    </script>
+    <h2>Sign Up</h2>
+    <p>
+        <label for="name" class="floatLabel">Full Name</label>
+        <input id="name" name="name" type="text" placeholder="Enter Full Name">
+    </p>
+    <p>
+        <label for="email" class="floatLabel">Email</label>
+        <input id="email" name="email" type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+            placeholder="Email Address">
+    </p>
+    <p>
+        <label for="username" class="floatLabel">Username</label>
+        <input id="username" name="username" type="text" pattern=".[a-z0-9]{3,15}" placeholder="Username">
+    </p>
+    <p>
+        <label for="password" class="floatLabel">Password</label>
+        <input id="password" name="password" type="password" pattern=".{8,}" placeholder="Password">
+
+    </p>
+    <p>
+        <label for="confirm_password" class="floatLabel">Confirm Password</label>
+        <input id="confirm_password" name="confirm_password" type="password" pattern=".{8,}"
+            placeholder="Confirm Password">
+        <span id="message"></span>
+    </p>
+    <p>
+        <input type="submit" value="Register" id="register">
+    </p>
+    </form>
+    <script>
+
+    </script>
+</body>
+
+</html>

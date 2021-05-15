@@ -1,0 +1,94 @@
+  {
+    "Outdoor":[
+    {
+      "product": "US Military Survival Handbook",
+      "price": 6.99,
+      "image": "./images/manual.jpg",
+      "description": "Become a survival expert with the same surival manual used and trusted by the US Military."
+    },
+    {
+      "product": "Woobie 3-in-1 Survival Blanket",
+      "price": 39.99,
+      "image": "./images/woobie.jpg",
+      "description": "Stay warm and dry out in the field with this 3-in-1 survival blanket. Can be used as a sleeping bag, poncho, and blanket."
+    },
+    {
+      "product": "Camo Face Paint",
+      "price": 2.99,
+      "image": "./images/paint.jpg",
+      "description": "Stay hidden from your enemies and blend in to your environment with this US Army Camo Face Paint."
+    },
+    {
+      "product": "6 in 1 LED Survival Whistle Kit",
+      "price": 4.99,
+      "image": "./images/whistle.jpg",
+      "description": "Features include LED light, signal mirror, thermometer, compass, magnifying glass, and whistle."
+    },
+    {
+      "product": "Stormproof Matches",
+      "price": 2.75,
+      "image": "./images/matches.jpg",
+      "description": "When surviving in the wild, a fire is a necessity. Come rain or shine, these matches can be trusted to ignite and get your fire started."
+    }
+  ],
+ "Clothing":[
+  {
+    "product": "Woodland BDU pants",
+    "price": 14.50,
+    "image": "./images/clothing1_BDUPants.jpeg",
+    "description": "Dress like a soldier with these Army-issued BDU style pants"
+  },
+  {
+    "product": "Woodland Camo BDU Top",
+    "price": 19.99,
+    "image": "./images/clothing2_BDUTop.jpeg",
+    "description": "Complete your Army unform with this Army-issued BDU camo Top"
+  },
+  {
+    "product": "Multicam Army Combat Shirt",
+    "price": 29.99,
+    "image": "./images/clothing3_Multicamshirt.jpeg",
+    "description": "Lightweight, breathable, and highly wicking, this Army Combat Shirt will keep you cool in the hottest environments"
+  }
+],
+"Patches":[
+  {
+    "product": "American Flag Patch Reversed",
+    "price": 3.99,
+    "image": "./images/patches1_USflag.jpeg",
+    "description": "Going on deployment and need to stock up on the Subdued Flag? Order some today"
+  },
+  {
+    "product": "US Army logo Patch",
+    "price": 5.50,
+    "image": "./images/patches2_USArmylogo.png",
+    "description": "Display your patriotism with the US Army of One shoulder sleeve insignia"
+  },
+  {
+    "product": "82nd Airborne Division Patch",
+    "price": 4.99,
+    "image": "./images/patches3_Airborne.png",
+    "description": "All the Way! This shoulder sleeve insignia is worn by the 82nd Airborne Division"
+  }
+],
+"Tactical":[
+  {
+    "product": "ACU Digital Camo Lightweight Tactical Assault Vest",
+    "price": 34.99,
+    "image": "./images/tactical1_ACUVest.jpeg",
+    "description": "This Lightweight Tactical Assault Vest has 8 pockets for storage so you can stay in the fight"
+  },
+  {
+    "product": "Condor Viper Single Point Bungee Sling",
+    "price": 24.99,
+    "image": "./images/tactical2_sling.jpeg",
+    "description": "Stay comfortable and tactical when carrying your rifle with this easy-to-adjust single point sling"
+  },
+  {
+    "product": "Anti-Fog Shatterproof Tactical Enhanced CE Goggles",
+    "price": 10.99,
+    "image": "./images/tactical3_goggles.jpeg",
+    "description": "The Tactical Goggles have been designed to provide you with a comfortable yet protected barrier between your eyes and the elements"
+  }
+]
+}
